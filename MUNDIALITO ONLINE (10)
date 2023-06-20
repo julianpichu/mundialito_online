@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mi Juego</title>
+  <style>
+    body {
+      background-image: url('https://i.pinimg.com/750x/14/4e/87/144e87ca066a535f0493b2c11a54f002.jpg');
+      background-size: cover;
+      text-align: center;
+    }
+    
+    .menu {
+      margin-top: 200px;
+    }
+    
+    .menu button {
+      width: 150px;
+      height: 150px;
+      background-color: #FFAA00;
+      color: white;
+      font-size: 24px;
+      border-radius: 50%;
+      margin-bottom: 20px;
+    }
+    
+    #menu2 button {
+      width: 200px;
+      height: 50px;
+      background-color: #FF8800;
+      color: white;
+      font-size: 18px;
+      margin: 10px;
+      border-radius: 5px;
+    }
+    
+    #menu2 h1 {
+      color: white;
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    #menu2 input {
+      width: 200px;
+      height: 30px;
+      margin-bottom: 10px;
+    }
+
+    #menu2 #joinButton {
+      margin-top: 10px;
+    }
+
+    .center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="menu" id="menu1">
+    <button onclick="showMenu2()">Play</button>
+    <button onclick="showLogin()">Login</button>
+  </div>
+  
+  <div class="menu" id="menu2" style="display: none;">
+    <h1>MUNDIALITO ONLINE</h1>
+    <div id="playerName"></div>
+    <button>Tutorial</button>
+    <button onclick="crearSala()">Crear Sala</button>
+    <div id="salaCode" style="display: none;"></div>
+    <div class="center">
+      <input type="text" id="joinCodeInput" placeholder="Ingresa el código de la sala">
+      <button id="joinButton" onclick="unirseSala()" disabled>Unirse a Sala</button>
+    </div>
+    <h3>Usuarios en la sala:</h3>
+    <ul id="userList"></ul>
+    <div class="center">
+      <button id="startButton" onclick="iniciarMundial()" style="display: none;">Iniciar Mundial</button>
+    </div>
+  </div>
+
+  <div id="login" style="display: none;">
+    <h2>Inicio de sesión</h2>
+    <input type="text" id="usernameInput" placeholder="Nombre de usuario">
+    <button onclick="login()">Iniciar sesión</button>
+  </div>
+  
+  <script>
+    var playerName = "";
+    var salaCode = "";
+
+    function showMenu2() {
+      document.getElementById('menu1').style.display = 'none';
+      document.getElementById('menu2').style.display = 'block';
+      document.body.style.backgroundImage = "url('https://i.pinimg.com/750x/d3/e0/b5/d3e0b5e34f2685d61064a3ba3b224664.jpg')";
+      document.getElementById('playerName').innerHTML = "¡Bienvenido, " + playerName + "!";
+    }
+    
+    function showLogin() {
+      document.getElementById('menu1').style.display = 'none';
+      document.getElementById('login').style.display = 'block';
+    }
+
+    function login() {
+      playerName = document.getElementById('usernameInput').value;
+      if (playerName !== "") {
+        document.getElementById('login').style.display = 'none';
+        showMenu2();
+      } else {
+        alert("Por favor, ingresa un nombre de usuario válido.");
+      }
+    }
+
+    function crearSala() {
+      // Generar un código único para la sala
+      salaCode = generateRoomCode();
+      document.getElementById('salaCode').innerHTML = "Código de la sala: " + salaCode;
+      document.getElementById('salaCode').style.display = 'block';
+      document.getElementById('joinCodeInput').style.display = 'block';
+      document.getElementById('joinButton').disabled = false;
+      document.getElementById('userList').innerHTML = "<li>" + playerName + " (anfitrión)</li>";
+      document.getElementById('startButton').style.display = 'block';
+    }
+
+    function unirseSala() {
+      var joinCode = document.getElementById('joinCodeInput').value;
+      if (joinCode === salaCode) {
+        var li = document.createElement("li");
+        li.appendChild(document.createTextNode(playerName));
+        document.getElementById('userList').appendChild(li);
+      } else {
+        alert("Código de sala incorrecto. Por favor, ingresa un código válido.");
+      }
+    }
+
+    function iniciarMundial() {
+      // Lógica para iniciar el mundial
+      alert("Iniciando mundial...");
+    }
+
+    function generateRoomCode() {
+      // Generar un código de sala aleatorio
+      var code = "";
+      var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      for (var i = 0; i < 6; i++) {
+        code += possible.charAt(Math.floor(Math.random() * possible.length));
+      }
+      return code;
+    }
+  </script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
